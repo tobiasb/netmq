@@ -26,7 +26,7 @@ namespace NetMQ.zmq
     {
 
         public static bool CreateProxy(SocketBase frontend,
-                        SocketBase backend, SocketBase capture)
+                        SocketBase backend, SocketBase captureIn, SocketBase captureOut = null)
         {
 
             //  The algorithm below assumes ratio of requests and replies processed
@@ -72,10 +72,10 @@ namespace NetMQ.zmq
                             return false;
 
                         //  Copy message to capture socket if any
-                        if (capture != null)
+                        if (captureIn != null)
                         {
                             Msg ctrl = new Msg(msg);
-                            capture.Send(ctrl, more > 0 ? SendReceiveOptions.SendMore : 0);
+                            captureIn.Send(ctrl, more > 0 ? SendReceiveOptions.SendMore : 0);
                         }
 
                         backend.Send(msg, more > 0 ? SendReceiveOptions.SendMore : 0);
@@ -108,10 +108,12 @@ namespace NetMQ.zmq
                             return false;
 
                         //  Copy message to capture socket if any
-                        if (capture != null)
+                        SocketBase captureOutInternal = captureOut ?? captureIn;
+
+                        if (captureOutInternal != null)
                         {
                             Msg ctrl = new Msg(msg);
-                            capture.Send(ctrl, more > 0 ? SendReceiveOptions.SendMore : 0);
+                            captureOut.Send(ctrl, more > 0 ? SendReceiveOptions.SendMore : 0);
 
                         }
 

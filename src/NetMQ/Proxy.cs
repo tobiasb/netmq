@@ -13,13 +13,15 @@ namespace NetMQ
     {
         NetMQSocket m_frontend;
         NetMQSocket m_backend;
-        NetMQSocket m_control;
+        NetMQSocket m_controlIn;
+        NetMQSocket m_controlOut;
 
-        public Proxy(NetMQSocket frontend, NetMQSocket backend, NetMQSocket control)
+        public Proxy(NetMQSocket frontend, NetMQSocket backend, NetMQSocket controlIn, NetMQSocket controlOut = null)
         {
             m_frontend = frontend;
             m_backend = backend;
-            m_control = control;
+            m_controlIn = controlIn;
+            m_controlOut = controlOut;
         }
 
         /// <summary>
@@ -27,7 +29,10 @@ namespace NetMQ
         /// </summary>
         public void Start()
         {
-            zmq.ZMQ.Proxy(m_frontend.SocketHandle, m_backend.SocketHandle, m_control != null ? m_control.SocketHandle : null);
+            zmq.ZMQ.Proxy(m_frontend.SocketHandle, 
+                          m_backend.SocketHandle, 
+                          m_controlIn != null ? m_controlIn.SocketHandle : null, 
+                          m_controlOut != null ? m_controlOut.SocketHandle : null);
         }
     }
 }

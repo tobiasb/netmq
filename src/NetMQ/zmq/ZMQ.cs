@@ -388,7 +388,7 @@ namespace NetMQ.zmq
         }
 
         //  The proxy functionality
-        public static bool Proxy(SocketBase frontend_, SocketBase backend_, SocketBase control_)
+        public static bool Proxy(SocketBase frontend_, SocketBase backend_, SocketBase controlIn_, SocketBase controlOut_)
         {
             if (frontend_ == null || backend_ == null)
             {
@@ -397,7 +397,8 @@ namespace NetMQ.zmq
             return NetMQ.zmq.Proxy.CreateProxy(
                     frontend_,
                     backend_,
-                    control_);
+                    controlIn_,
+                    controlOut_);
         }
 
         //[Obsolete]
